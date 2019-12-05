@@ -47,10 +47,10 @@ END
 
   synovpnc connect --id=${client}
 
-  echo "Current address: ${cur_ip} (timed out if empty)"
-  echo "New Server: ${address}"
+  echo "Address before reconnect: ${curr_ip} (timed out if empty)"
+  echo "New address: ${address}"
 
-  /volume1/\@appstore/DownloadStation/scripts/S25download.sh start >> /dev/null
+  /volume1/\@appstore/DownloadStation/scripts/S25download.sh start > /dev/null
 
   exit 123
 }
