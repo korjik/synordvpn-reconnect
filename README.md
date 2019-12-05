@@ -60,5 +60,6 @@ https://nordvpn.com/tutorials/synology-nas/openvpn/
   ![5](media/5.png)
 
 6. Send email on reconnect and put the script path
+  /volume1/opt/synordvpn-reconnect/runme.sh
 
   ![6](media/6.png)
