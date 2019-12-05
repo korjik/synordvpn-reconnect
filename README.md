@@ -24,7 +24,8 @@ Login via ssh and run
 
 ```bash
 sudo wget -O /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux32
-chmod +x /usr/bin/jq
+sudo chmod +x /usr/bin/jq
+
 mkdir /volume1/opt/synordvpn-reconnect
 wget -O /volume1/opt/synordvpn-reconnect/runme.sh https://raw.githubusercontent.com/korjik/synordvpn-reconnect/master/runme.sh
 chmod +x /volume1/opt/synordvpn-reconnect/runme.sh
