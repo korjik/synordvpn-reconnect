@@ -42,22 +42,22 @@ https://nordvpn.com/tutorials/synology-nas/openvpn/
 
   ![1](media/1.png)
 
-1. Find Task Scheduler
+2. Find Task Scheduler
 
   ![2](media/2.png)
 
-1. Create a scheduled task as a user defined script
+3. Create a scheduled task as a user defined script
 
   ![3](media/3.png)
 
-1. Name it and run as root
+4. Name it and run as root
 
   ![4](media/4.png)
 
-1. Choose the schedule
+5. Choose the schedule
 
   ![5](media/5.png)
 
-1. Send email on reconnect and put the script path
+6. Send email on reconnect and put the script path
 
   ![6](media/6.png)
