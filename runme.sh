@@ -11,15 +11,18 @@ function reconnect {
   tail -30 /var/log/messages
   tail -100 /var/log/nordvpn.txt
 
-  /volume1/@appstore/DownloadStation/scripts/S25download.sh stop
+  /volume1/\@appstore/DownloadStation/scripts/S25download.sh stop
 
   synovpnc kill_client --name="${name}"
 
   until [[ $(synovpnc get_conn | grep 'No connection!!') ]]; do
     sleep 2
   done
+  
+  recommend=$(curl --silent --interface eth0 "https://api.nordvpn.com/v1/servers/recommendations?filters\[servers_groups\]\[identifier\]=legacy_standard&filters\[servers_technologies\]\[identifier\]=openvpn_${proto}&limit=8" | jq -r --slurp '.[] | sort_by(.load) | limit(1;.[])')
+  hostname=$(echo "${recommend}" | jq -r .hostname);
+  address=$(echo "${recommend}" | jq -r .station);
 
-  hostname=$(curl --silent --interface eth0 "https://api.nordvpn.com/v1/servers/recommendations?filters\[servers_groups\]\[identifier\]=legacy_standard&filters\[servers_technologies\]\[identifier\]=openvpn_${proto}&limit=8" | jq -r --slurp '.[] | sort_by(.load) | limit(1;.[]) | .hostname');
   wget https://downloads.nordcdn.com/configs/files/ovpn_${proto}/servers/${hostname}.${proto}.ovpn
 
 cat >>${hostname}.${proto}.ovpn<<END
@@ -31,6 +34,7 @@ plugin /lib/openvpn/openvpn-down-root.so /usr/syno/etc.defaults/synovpnclient/sc
 log-append /var/log/nordvpn.txt
 END
 
+sed -i 's/auth-user-pass/auth-user-pass\ \/tmp\/ovpn_client_up/' ${hostname}.${proto}.ovpn
 mv ${hostname}.${proto}.ovpn /usr/syno/etc/synovpnclient/openvpn/client_${client} 
 
   cat >/usr/syno/etc/synovpnclient/vpnc_connecting <<END
@@ -39,12 +43,14 @@ conf_name=${name}
 proto=openvpn
 END
 
+  sed -i "s/remote=.*/remote=${address}/" /usr/syno/etc/synovpnclient/openvpn/ovpnclient.conf
+
   synovpnc connect --id=${client}
 
   echo "Current address: ${cur_ip} (timed out if empty)"
-  echo "New Server: ${server}"
+  echo "New Server: ${address}"
 
-  /volume1/@appstore/DownloadStation/scripts/S25download.sh start >> /dev/null
+  /volume1/\@appstore/DownloadStation/scripts/S25download.sh start >> /dev/null
 
   exit 123
 }
