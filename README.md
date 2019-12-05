@@ -1,4 +1,4 @@
-# NordVPN Openvpn Reconnect Script for Synology Task Scheduler
+# NordVPN OpenVPN Reconnect Script for Synology Task Scheduler
 
 Bash script that automatically reconnects OpenVPN to the least loaded
 recommended serever.
@@ -30,7 +30,7 @@ wget -O /volume1/opt/synordvpn-reconnect/runme.sh https://raw.githubusercontent.
 chmod +x /volume1/opt/synordvpn-reconnect/runme.sh
 ```
 
-### Set up Open VPN
+### Set up OpenVPN
 
 Use Synology oficial guide to set up VPN:
 

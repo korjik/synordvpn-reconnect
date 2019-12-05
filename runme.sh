@@ -6,8 +6,8 @@ function reconnect {
   name=$(grep 'conf_name' /usr/syno/etc/synovpnclient/openvpn/ovpnclient.conf | awk -F '=' '{print $2}')
   proto=$(grep '^proto\ ' /usr/syno/etc/synovpnclient/openvpn/client_${client} | awk '{print $2}')
 
-  synovpnc get --name "${name}"
-  synovpnc get_conn
+  synovpnc get --name "${name}" | grep -v '\ \ Password'
+  synovpnc get_conn 
   tail -30 /var/log/messages
   tail -100 /var/log/nordvpn.txt
 
