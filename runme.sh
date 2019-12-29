@@ -50,7 +50,9 @@ END
   echo "Address before reconnect: ${curr_ip} (timed out if empty)"
   echo "New address: ${address}"
 
-  /volume1/\@appstore/DownloadStation/scripts/S25download.sh start > /dev/null
+  if [[ "${address}" != "${home_ip}" ]]; then
+    /volume1/\@appstore/DownloadStation/scripts/S25download.sh start > /dev/null
+  fi
 
   exit 123
 }
