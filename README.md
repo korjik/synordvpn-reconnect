@@ -27,8 +27,8 @@ sudo wget -O /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.6
 sudo chmod +x /usr/bin/jq
 
 mkdir /volume1/opt/synordvpn-reconnect
-wget -O /volume1/opt/synordvpn-reconnect/runme.sh https://raw.githubusercontent.com/korjik/synordvpn-reconnect/master/runme.sh
-chmod +x /volume1/opt/synordvpn-reconnect/runme.sh
+wget -O /volume1/opt/synordvpn-reconnect/nordvpn-reconnect.sh https://raw.githubusercontent.com/korjik/synordvpn-reconnect/master/nordvpn-reconnect.sh
+chmod +x /volume1/opt/synordvpn-reconnect/nordvpn-reconnect.sh
 ```
 
 ### Set up OpenVPN
@@ -60,6 +60,6 @@ https://nordvpn.com/tutorials/synology-nas/openvpn/
   ![5](media/5.png)
 
 6. Send email on reconnect and put the script path
-  /volume1/opt/synordvpn-reconnect/runme.sh
+  /volume1/opt/synordvpn-reconnect/nordvpn-reconnect.sh
 
   ![6](media/6.png)
