@@ -50,7 +50,9 @@ END
   echo "Address before reconnect: ${curr_ip} (timed out if empty)"
   echo "New address: ${address}"
 
-  if [[ "${address}" != "${home_ip}" ]]; then
+  curr_ip=$(curl -s --max-time 10 https://ifconfig.io)
+
+  if [[ "${curr_ip}" != "${home_ip}" ]]; then
     /volume1/\@appstore/DownloadStation/scripts/S25download.sh start > /dev/null
   fi
 
