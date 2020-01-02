@@ -21,9 +21,9 @@ function reconnect {
     sleep 2
   done
   
-  [[ -s ${PREV_SERVER_FILE} ]] && prev_hostname=$(tail -1 "${PREV_SERVER_FILE}") || prev_hostname='abcdef'
+  [[ -f ${PREV_SERVER_FILE} && $(cat ${PREV_SERVER_FILE}) ]] && prev_hostname=$(tail -1 "${PREV_SERVER_FILE}") || prev_hostname='abcdef'
   hostname=$(curl --silent --interface eth0 "https://api.nordvpn.com/v1/servers/recommendations?filters\[servers_groups\]\[identifier\]=legacy_standard&filters\[servers_technologies\]\[identifier\]=openvpn_${proto}&limit=8" \
-    | jq --slurp -r ".[] | sort_by(.load) | .[].hostname" | grep -v "${prev_hostname}")
+    | jq --slurp -r ".[] | sort_by(.load) | .[].hostname" | grep -v "${prev_hostname}" | head -1)
 
   echo "${hostname}" > "${PREV_SERVER_FILE}"
   echo "Choosing server hostname: ${hostname}"
