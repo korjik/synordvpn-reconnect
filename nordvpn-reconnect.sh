@@ -1,5 +1,7 @@
 #!/bin/bash
 
+PREV_SERVER_FILE='/tmp/last-nordvpn-hostname'
+
 function reconnect {
 
   client=$(grep -Eo 'o[0-9]+' /usr/syno/etc/synovpnclient/openvpn/ovpnclient.conf)
@@ -19,10 +21,12 @@ function reconnect {
     sleep 2
   done
   
-  recommend=$(curl --silent --interface eth0 "https://api.nordvpn.com/v1/servers/recommendations?filters\[servers_groups\]\[identifier\]=legacy_standard&filters\[servers_technologies\]\[identifier\]=openvpn_${proto}&limit=8" | jq -r --slurp '.[] | sort_by(.load) | limit(1;.[])')
-  hostname=$(echo "${recommend}" | jq -r .hostname);
-  address=$(echo "${recommend}" | jq -r .station);
+  [[ -s ${PREV_SERVER_FILE} ]] && prev_hostname=$(tail -1 "${PREV_SERVER_FILE}") || prev_hostname='abcdef'
+  hostname=$(curl --silent --interface eth0 "https://api.nordvpn.com/v1/servers/recommendations?filters\[servers_groups\]\[identifier\]=legacy_standard&filters\[servers_technologies\]\[identifier\]=openvpn_${proto}&limit=8" \
+    | jq --slurp -r ".[] | sort_by(.load) | .[].hostname" | grep -v "${prev_hostname}")
 
+  echo "${hostname}" > "${PREV_SERVER_FILE}"
+  echo "Choosing server hostname: ${hostname}"
   wget https://downloads.nordcdn.com/configs/files/ovpn_${proto}/servers/${hostname}.${proto}.ovpn
 
 cat >>${hostname}.${proto}.ovpn<<END
@@ -36,6 +40,8 @@ END
 
 sed -i 's/auth-user-pass/auth-user-pass\ \/tmp\/ovpn_client_up/' ${hostname}.${proto}.ovpn
 mv ${hostname}.${proto}.ovpn /usr/syno/etc/synovpnclient/openvpn/client_${client} 
+
+address=$(grep '^remote\ ' /usr/syno/etc/synovpnclient/openvpn/client_${client} | awk '{print $2}')
 
   cat >/usr/syno/etc/synovpnclient/vpnc_connecting <<END
 conf_id=${client}
