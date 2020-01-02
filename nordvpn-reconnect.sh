@@ -38,10 +38,10 @@ plugin /lib/openvpn/openvpn-down-root.so /usr/syno/etc.defaults/synovpnclient/sc
 log-append /var/log/nordvpn.txt
 END
 
-sed -i 's/auth-user-pass/auth-user-pass\ \/tmp\/ovpn_client_up/' ${hostname}.${proto}.ovpn
-mv ${hostname}.${proto}.ovpn /usr/syno/etc/synovpnclient/openvpn/client_${client} 
+  sed -i 's/auth-user-pass/auth-user-pass\ \/tmp\/ovpn_client_up/' ${hostname}.${proto}.ovpn
+  mv ${hostname}.${proto}.ovpn /usr/syno/etc/synovpnclient/openvpn/client_${client} 
 
-address=$(grep '^remote\ ' /usr/syno/etc/synovpnclient/openvpn/client_${client} | awk '{print $2}')
+  address=$(grep '^remote\ ' /usr/syno/etc/synovpnclient/openvpn/client_${client} | awk '{print $2}')
 
   cat >/usr/syno/etc/synovpnclient/vpnc_connecting <<END
 conf_id=${client}
